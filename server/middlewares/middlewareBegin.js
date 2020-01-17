@@ -1,5 +1,7 @@
 module.exports.default = async (req, res, next) => {
-  const trx = await res.db.transaction();
+  const trxProvider = res.db.transactionProvider();
+  const trx = await trxProvider();
+
   res.trx = trx;
 
   console.log("----before----");
