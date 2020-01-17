@@ -1,27 +1,17 @@
-const knex = require("knex");
-
-var kn = require("knex")({
-  client: "postgres",
-  connection: {
-    host: "localhost",
-    user: "bogdan.nedelcu",
-    password: null,
-    database: "bogdan.nedelcu"
-  }
-});
+const db = require("./db").default;
 
 async function query() {
   console.log("----before----");
-  await kn("cubejs")
+  await db("cubejs")
     .where("id", 5)
     .del();
-  await kn("cubejs")
+  await db("cubejs")
     .where("id", 6)
     .del();
-  const test = await kn.select("*").from("cubejs");
+  const test = await db.select("*").from("cubejs");
   console.log(test);
 
-  const trx = await kn.transaction();
+  const trx = await db.transaction();
 
   try {
     await trx("cubejs").insert({
@@ -37,13 +27,13 @@ async function query() {
       account_balance: 2,
       debt: 123
     });
-    throw Error("ooops");
+    // throw Error("ooops");
     await trx.commit();
   } catch (e) {
     await trx.rollback();
   }
 
-  console.log("----after----", await kn.select("*").from("cubejs"));
+  console.log("----after----", await db.select("*").from("cubejs"));
 }
 
 query();
