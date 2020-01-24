@@ -1,5 +1,3 @@
-const knex = require("knex");
-
 module.exports.default = require("knex")({
   client: "postgres",
   connection: {
